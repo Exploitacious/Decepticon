@@ -77,6 +77,19 @@ def test_gateway_key_activates_method(clean_env):
     assert AuthMethod.OPENCODE_API in inv.resolved_chain
 
 
+def test_opencode_go_subscription_key_activates_method(clean_env):
+    # OpenCode Go is a first-class OpenAI-compatible gateway (flat
+    # subscription). Its bearer key is detected and routed exactly like any
+    # other gateway key — a lone OpenCode Go key produces an active chain.
+    clean_env.setenv("OPENCODE_GO_API_KEY", "sk-" + "g" * 40)
+    inv = factory.auth_inventory()
+    go = next(s for s in inv.statuses if s.method == AuthMethod.OPENCODE_GO_API)
+    assert go.configured
+    assert go.active
+    assert go.kind == "api"
+    assert AuthMethod.OPENCODE_GO_API in inv.resolved_chain
+
+
 def test_placeholder_key_is_not_configured(clean_env):
     clean_env.setenv("ANTHROPIC_API_KEY", "your-anthropic-key-here")
     inv = factory.auth_inventory()

@@ -317,6 +317,7 @@ default fallback chain; pick a specific route at runtime with `/model`
 | Provider | Env Var | Console |
 |----------|---------|---------|
 | OpenCode Zen | `OPENCODE_API_KEY` | [opencode.ai/docs/zen](https://opencode.ai/docs/zen/) |
+| OpenCode Go | `OPENCODE_GO_API_KEY` | [opencode.ai/docs/zen](https://opencode.ai/docs/zen/) |
 | Vercel AI Gateway | `VERCEL_AI_GATEWAY_API_KEY` | [vercel.com/docs/ai-gateway](https://vercel.com/docs/ai-gateway) |
 | Hugging Face Router | `HF_TOKEN` | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
 | Venice AI | `VENICE_API_KEY` | [venice.ai/settings/api](https://venice.ai/settings/api) |

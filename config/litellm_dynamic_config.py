@@ -175,6 +175,10 @@ PROVIDER_API_KEY_ENV: dict[str, str] = {
 # ``api_key_env`` is the env var holding the bearer token.
 OPENAI_COMPAT_GATEWAYS: dict[str, tuple[str, str]] = {
     "opencode": ("https://opencode.ai/zen/v1", "OPENCODE_API_KEY"),
+    # OpenCode Go — flat subscription tier. The model alias uses the
+    # ``opencode-go/`` prefix (hyphen); _provider_prefix normalizes the hyphen
+    # to ``opencode_go``, so that is the key here.
+    "opencode_go": ("https://opencode.ai/zen/go/v1", "OPENCODE_GO_API_KEY"),
     "vercel": ("https://ai-gateway.vercel.sh/v1", "VERCEL_AI_GATEWAY_API_KEY"),
     "hf": ("https://router.huggingface.co/v1", "HF_TOKEN"),
     "venice": ("https://api.venice.ai/api/v1", "VENICE_API_KEY"),

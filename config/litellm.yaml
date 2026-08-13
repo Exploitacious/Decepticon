@@ -531,6 +531,35 @@ model_list:
       input_cost_per_token: 0
       output_cost_per_token: 0
 
+  # OpenCode Go — https://opencode.ai/zen/go/v1 (flat subscription; pinned $0,
+  # not per-token billed). The ``opencode-go/`` alias mirrors METHOD_MODELS;
+  # any other catalog id (kimi-k3, qwen3.8-max, deepseek-v4-pro, …) is reachable
+  # via a DECEPTICON_MODEL_<ROLE>=opencode-go/<id> override (dynamic route).
+  - model_name: opencode-go/glm-5.2
+    litellm_params:
+      model: openai/glm-5.2
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+  - model_name: opencode-go/glm-5.1
+    litellm_params:
+      model: openai/glm-5.1
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+  - model_name: opencode-go/glm-5
+    litellm_params:
+      model: openai/glm-5
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+
   # Vercel AI Gateway — https://ai-gateway.vercel.sh/v1
   - model_name: vercel/anthropic/claude-opus-4.6
     litellm_params:
@@ -857,6 +886,8 @@ router_settings:
     # before ModelFallbackMiddleware crosses to another provider.
     - {"opencode/claude-opus-4-6": ["opencode/gpt-5.4"]}
     - {"opencode/gpt-5.4": ["opencode/glm-5-free"]}
+    - {"opencode-go/glm-5.2": ["opencode-go/glm-5.1"]}
+    - {"opencode-go/glm-5.1": ["opencode-go/glm-5"]}
     - {"vercel/anthropic/claude-opus-4.6": ["vercel/anthropic/claude-sonnet-4.6"]}
     - {"vercel/anthropic/claude-sonnet-4.6": ["vercel/anthropic/claude-haiku-4.5"]}
     - {"hf/deepseek-ai/DeepSeek-V3.1": ["hf/meta-llama/Llama-3.3-70B-Instruct-Turbo"]}

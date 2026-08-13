@@ -241,6 +241,7 @@ class TestGatewayChains:
 
     GATEWAYS = (
         AuthMethod.OPENCODE_API,
+        AuthMethod.OPENCODE_GO_API,
         AuthMethod.VERCEL_GATEWAY_API,
         AuthMethod.HUGGINGFACE_API,
         AuthMethod.VENICE_API,
@@ -271,6 +272,7 @@ class TestGatewayChains:
         # keeps two gateways sharing an upstream slug from colliding.
         expected_prefix = {
             AuthMethod.OPENCODE_API: "opencode/",
+            AuthMethod.OPENCODE_GO_API: "opencode-go/",
             AuthMethod.VERCEL_GATEWAY_API: "vercel/",
             AuthMethod.HUGGINGFACE_API: "hf/",
             AuthMethod.VENICE_API: "venice/",
