@@ -334,6 +334,23 @@ def test_build_model_entry_routes_gateway_to_openai_with_api_base() -> None:
     }
 
 
+def test_build_model_entry_opencode_go_hyphen_alias_normalizes() -> None:
+    """The ``opencode-go/`` alias (hyphen) resolves through the ``opencode_go``
+    gateway key — _provider_prefix normalizes hyphens to underscores — and
+    pins the Go subscription base URL + bearer key.
+    """
+    entry = build_model_entry("opencode-go/glm-5.2")
+
+    assert entry["model_name"] == "opencode-go/glm-5.2", (
+        "model_name must stay the agent-facing alias unchanged"
+    )
+    assert entry["litellm_params"] == {
+        "model": "openai/glm-5.2",
+        "api_key": "os.environ/OPENCODE_GO_API_KEY",
+        "api_base": "https://opencode.ai/zen/go/v1",
+    }
+
+
 def test_build_model_entry_gateway_preserves_multi_slash_slug() -> None:
     """Gateways whose ids embed slashes (``creator/model``) keep the full
     slug after ``openai/`` so the gateway receives the id it expects.

@@ -57,6 +57,7 @@ collide in the model_list.
 
                     HIGH                          MID                            LOW
   opencode_api     opencode/claude-opus-4-6      opencode/gpt-5.4               opencode/glm-5-free
+  opencode_go_api  opencode-go/glm-5.2           opencode-go/glm-5.1            opencode-go/glm-5
   vercel_gateway   vercel/anthropic/…opus-4.6    vercel/anthropic/…sonnet-4.6  vercel/anthropic/…haiku-4.5
   huggingface_api  hf/…/DeepSeek-V3.1            hf/…/Llama-3.3-70B-…Turbo     hf/openai/gpt-oss-120b
   venice_api       venice/claude-opus-4-6        venice/claude-sonnet-4-6      venice/deepseek-v4-flash
@@ -157,6 +158,7 @@ class AuthMethod(StrEnum):
     # keeps the gateway prefix (``opencode/claude-opus-4-6``) so routes
     # never collide when two gateways expose the same upstream slug.
     OPENCODE_API = "opencode_api"  # OpenCode Zen gateway (opencode.ai)
+    OPENCODE_GO_API = "opencode_go_api"  # OpenCode Go — flat subscription (opencode.ai/zen/go)
     VERCEL_GATEWAY_API = "vercel_gateway_api"  # Vercel AI Gateway
     HUGGINGFACE_API = "huggingface_api"  # Hugging Face Router (Inference Providers)
     VENICE_API = "venice_api"  # Venice AI (privacy-first, no logs)
@@ -448,6 +450,18 @@ METHOD_MODELS: dict[AuthMethod, dict[Tier, str]] = {
         Tier.HIGH: "opencode/claude-opus-4-6",
         Tier.MID: "opencode/gpt-5.4",
         Tier.LOW: "opencode/glm-5-free",
+    },
+    AuthMethod.OPENCODE_GO_API: {
+        # OpenCode Go — https://opencode.ai/zen/go/v1. Flat-rate subscription
+        # tier (pinned $0, not per-token billed). Catalog spans GLM, Kimi,
+        # Qwen, DeepSeek, MiniMax, plus gpt-5.6-luna / grok-4.5. Default to the
+        # GLM family for clean within-provider HIGH→MID→LOW degradation; point
+        # any role at another catalog id with
+        # DECEPTICON_MODEL_<ROLE>=opencode-go/<id> (dynamically registered via
+        # the opencode_go OPENAI_COMPAT_GATEWAYS entry).
+        Tier.HIGH: "opencode-go/glm-5.2",
+        Tier.MID: "opencode-go/glm-5.1",
+        Tier.LOW: "opencode-go/glm-5",
     },
     AuthMethod.VERCEL_GATEWAY_API: {
         # Vercel AI Gateway — https://ai-gateway.vercel.sh/v1. Model ids

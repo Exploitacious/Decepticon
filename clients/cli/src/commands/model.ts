@@ -133,6 +133,11 @@ const SUPPORTED_MODELS: Record<string, string[]> = {
     "opencode/gpt-5.4",
     "opencode/glm-5-free",
   ],
+  "OpenCode Go": [
+    "opencode-go/glm-5.2",
+    "opencode-go/glm-5.1",
+    "opencode-go/glm-5",
+  ],
   "Vercel AI Gateway": [
     "vercel/anthropic/claude-opus-4.6",
     "vercel/anthropic/claude-sonnet-4.6",
