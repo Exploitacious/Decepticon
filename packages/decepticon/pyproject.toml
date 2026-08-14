@@ -41,7 +41,6 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "pyyaml>=6.0.0",
-    "python-dotenv>=1.0.0",
     # LLM
     "langchain-core>=0.3.0",
     "langchain-openai>=0.3.0",
@@ -69,7 +68,6 @@ dependencies = [
     "uvicorn>=0.30.0",
     # CLI
     "typer[all]>=0.9.0",
-    "xxhash>=3.0.0",
     # Security
     "defusedxml>=0.7.0",
     # Transitive-dependency security floors (pip-audit gate). Not imported
