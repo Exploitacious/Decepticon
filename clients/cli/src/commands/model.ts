@@ -133,11 +133,9 @@ const SUPPORTED_MODELS: Record<string, string[]> = {
     "opencode/gpt-5.4",
     "opencode/glm-5-free",
   ],
-  "OpenCode Go": [
-    "opencode-go/glm-5.2",
-    "opencode-go/glm-5.1",
-    "opencode-go/glm-5",
-  ],
+  // OpenCode Go's GLM catalog collapsed to a single flagship (glm-5.3);
+  // the older glm-5.2/5.1/5 ids were retired upstream.
+  "OpenCode Go": ["opencode-go/glm-5.3"],
   "Vercel AI Gateway": [
     "vercel/anthropic/claude-opus-4.6",
     "vercel/anthropic/claude-sonnet-4.6",

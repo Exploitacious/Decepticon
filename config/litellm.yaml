@@ -548,6 +548,24 @@ model_list:
       input_cost_per_token: 0
       output_cost_per_token: 0
 
+  # OpenCode Go (dedicated gateway method) — same /zen/go/v1 GLM 5.3 endpoint
+  # as custom/glm-5.3 above, but keyed on OPENCODE_GO_API_KEY so the first-class
+  # opencode_go_api auth method (METHOD_MODELS + the opencode_go
+  # OPENAI_COMPAT_GATEWAYS entry) resolves to a real route instead of a dangling
+  # id. glm-5.3 is the sole surviving GLM slug here (5.2/5.1/5 retired upstream),
+  # so it is the model_name METHOD_MODELS emits at every tier. Pinned $0: flat
+  # subscription, not per-token billed.
+  - model_name: opencode-go/glm-5.3
+    litellm_params:
+      model: openai/glm-5.3
+      api_base: https://opencode.ai/zen/go/v1
+      api_key: os.environ/OPENCODE_GO_API_KEY
+      reasoning_effort: max
+      allowed_openai_params: ["reasoning_effort"]
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+
   # Vercel AI Gateway — https://ai-gateway.vercel.sh/v1
   - model_name: vercel/anthropic/claude-opus-4.6
     litellm_params:
