@@ -36,6 +36,11 @@ workflow.
   catalog, and the LiteLLM routes.
 - Restored the three Bedrock aliases (`claude-opus-4-7`, `sonnet-4-6`,
   `haiku-4-5`) that an in-flight edit had dropped as collateral.
+- **langgraph dev runs with `--no-reload`** (`docker-compose.yml`). The hot-reload
+  watcher was reacting to langgraph's own `.langgraph_api/.langgraph_ops.pckl`
+  heartbeat writes (~every 10s), which with `--allow-blocking` wedged the event
+  loop so `:2024` never served and `decepticon start`'s "assistant loaded" check
+  timed out. Hot-reload is a dev-only convenience not wanted on an engagement box.
 
 ### Removed
 
