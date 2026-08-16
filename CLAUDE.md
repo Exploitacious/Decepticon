@@ -87,16 +87,40 @@ portable essentials:
   *real* `.env`, `workspace/`, and `telemetry/` as local files. **Code lives in
   the fork; state lives in `~/.decepticon`.** A rebuild never touches
   `.env`/`workspace`/volumes.
-- **We run without the OSS launcher** — plain `docker compose --profile cli` from
-  `~/.decepticon`. That means images build from source (see
+- **Two ways to run it, both safe here.** The Go launcher is wired — `decepticon`
+  is a symlink in `~/.local/bin` pointing at `clients/launcher/bin/decepticon`
+  (built from this fork via `make launcher`). `decepticon start` brings the stack
+  up and drops into the CLI, and also starts the opscontrol daemon so the
+  orchestrator's `ops_start` can spin up specialist workloads (Sliver C2,
+  AD/BloodHound, reversing). Plain `docker compose --profile cli` from
+  `~/.decepticon` is the equivalent headless path. Either way, images build from
+  source (see
   [ARCHITECTURE.md § Launching the stack](ARCHITECTURE.md#launching-the-stack)).
-- **`AUTO_UPDATE=false`** — never let it pull GHCR images; that would clobber the
-  fork-built ones. Updates come from a rebuild only.
+- **`AUTO_UPDATE=false`, and never run `decepticon update`.** Both pull upstream
+  GHCR images and would clobber the fork-built ones. Updates come only from a
+  rebuild — `scripts/refresh.sh` (below).
 - **LLM: GLM 5.3 via OpenCode Go.** `DECEPTICON_AUTH_PRIORITY=custom_openai_api`,
   model `custom/glm-5.3` on `https://opencode.ai/zen/go/v1`, served by the LiteLLM
   proxy on `127.0.0.1:4000` (`reasoning_effort: max`, cost pinned `$0`). Full
   routing detail in
   [ARCHITECTURE.md § LLM routing](ARCHITECTURE.md#llm-routing--model-tiers).
+
+### Launching
+
+```bash
+decepticon start     # bring the stack up + launch the CLI (also starts opscontrol)
+decepticon status    # service status
+decepticon stop      # stop all services
+decepticon logs      # follow service logs
+# headless / no launcher:
+cd ~/.decepticon && docker compose --profile cli up -d
+```
+
+`decepticon` is a symlink to the fork-built launcher. If it goes missing after a
+clone/rebuild, re-wire it:
+`ln -sf ~/Decepticon/clients/launcher/bin/decepticon ~/.local/bin/decepticon`
+(rebuild the binary first with `make launcher` if absent). Never `decepticon
+update` — use `scripts/refresh.sh`.
 
 ### Rebuild loop
 
