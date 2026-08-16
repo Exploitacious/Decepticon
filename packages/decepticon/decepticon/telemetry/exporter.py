@@ -36,6 +36,14 @@ _USER_AGENT = "decepticon-telemetry/1.0"
 
 
 def _http_post(url: str, body: bytes) -> None:
+    # Umbrella fork: vendor telemetry egress removed — never phone home. This is a
+    # hard no-op BEFORE any URL/network construction, so no batch can ever reach
+    # the maintainer's telemetry gateway even if a caller wires this transport
+    # directly. Belt-and-suspenders with the blanked endpoint in
+    # telemetry/config.py::resolve_config (which stops the exporter being built at
+    # all on the normal env-driven path). Local event logging (events.jsonl via
+    # EventLogMiddleware) is a separate path and is unaffected. See CHANGELOG.
+    return
     req = urllib.request.Request(
         url,
         data=body,

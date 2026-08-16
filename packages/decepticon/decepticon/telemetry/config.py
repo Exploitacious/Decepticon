@@ -178,7 +178,14 @@ def resolve_config(env: dict[str, str] | None = None) -> TelemetryConfig:
         mode = resolve_mode(e)
     else:
         mode = persisted_mode(e) or TelemetryMode.OFF
-    endpoint = (e.get("DECEPTICON_TELEMETRY_ENDPOINT") or "").strip() or None
+    # Umbrella fork: vendor telemetry egress removed — never phone home. The
+    # gateway endpoint is hard-blanked here regardless of DECEPTICON_TELEMETRY_ENDPOINT,
+    # so TelemetryConfig.enabled is always False and no BatchExporter (the only
+    # outbound HTTP path) is ever constructed. Belt-and-suspenders with the
+    # short-circuit in telemetry/exporter.py::_http_post. Local event logging
+    # (events.jsonl via EventLogMiddleware) is a separate path and is unaffected.
+    # See CHANGELOG.
+    endpoint = None
     # Only mint/read an install id when telemetry is actually on — keeps OFF
     # purely side-effect-free.
     iid = (

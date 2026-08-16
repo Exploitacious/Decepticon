@@ -37,6 +37,21 @@ workflow.
 - Restored the three Bedrock aliases (`claude-opus-4-7`, `sonnet-4-6`,
   `haiku-4-5`) that an in-flight edit had dropped as collateral.
 
+### Removed
+
+- **Vendor telemetry egress removed — the harness never phones home; local event
+  logging retained.** The outbound POST to the maintainer's telemetry gateway is
+  neutered in code (belt-and-suspenders): `telemetry/exporter.py::_http_post` is a
+  hard no-op before any URL/network construction, and
+  `telemetry/config.py::resolve_config` hard-blanks the endpoint so
+  `TelemetryConfig.enabled` is always False and no `BatchExporter` is ever built.
+  `.env.example` ships `DECEPTICON_TELEMETRY=off` + `DO_NOT_TRACK=1` and no
+  gateway endpoint. Local engagement evidence (`events.jsonl` via
+  `EventLogMiddleware`) is a separate on-box path and is unaffected. The
+  optional, off-by-default OpenTelemetry path (`telemetry/otel.py`, `OTEL_ENABLED`)
+  is untouched — it targets an operator-configured OTLP collector, not the vendor
+  gateway.
+
 ### Fixed (documentation drift; code is the source of truth)
 
 - `README.md` now describes the HTTP sandbox transport (`sandbox:9999`, not the

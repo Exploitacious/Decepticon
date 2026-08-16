@@ -97,7 +97,10 @@ def test_persisted_mode_roundtrip(tmp_path) -> None:
     set_persisted_mode(TelemetryMode.RESEARCH, env)
     assert persisted_mode(env) is TelemetryMode.RESEARCH
     cfg = resolve_config({**env, "DECEPTICON_TELEMETRY_ENDPOINT": "https://gw"})
-    assert cfg.mode is TelemetryMode.RESEARCH and cfg.enabled is True
+    # Umbrella fork: the persisted mode still round-trips (mode is RESEARCH), but
+    # cfg.enabled is always False because resolve_config hard-blanks the endpoint
+    # (vendor egress removed). See CHANGELOG.
+    assert cfg.mode is TelemetryMode.RESEARCH and cfg.enabled is False
 
 
 def test_off_overrides_persisted_mode(tmp_path) -> None:

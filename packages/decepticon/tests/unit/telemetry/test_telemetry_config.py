@@ -29,18 +29,23 @@ def test_unrecognized_value_fails_closed_to_off() -> None:
     assert resolve_mode({"DECEPTICON_TELEMETRY": "verbose"}) is TelemetryMode.OFF
 
 
-def test_enabled_requires_mode_and_endpoint() -> None:
+def test_enabled_always_false_egress_removed() -> None:
+    # Umbrella fork: vendor telemetry egress removed — resolve_config hard-blanks
+    # the endpoint, so cfg.enabled is False for EVERY combination, including a
+    # configured mode + endpoint. Upstream this last case enabled sending; here it
+    # can never enable, which is the whole point of the neuter. See CHANGELOG.
     # mode on but no endpoint -> not enabled
     cfg = resolve_config({"DECEPTICON_TELEMETRY": "basic"})
     assert cfg.enabled is False
     # off but endpoint set -> not enabled
     cfg = resolve_config({"DECEPTICON_TELEMETRY_ENDPOINT": "https://gw.example"})
     assert cfg.enabled is False
-    # both -> enabled
+    # both set -> STILL not enabled (endpoint is blanked, egress removed)
     cfg = resolve_config(
         {"DECEPTICON_TELEMETRY": "basic", "DECEPTICON_TELEMETRY_ENDPOINT": "https://gw.example"}
     )
-    assert cfg.enabled is True
+    assert cfg.enabled is False
+    assert cfg.endpoint is None
 
 
 def test_install_id_persists(tmp_path) -> None:

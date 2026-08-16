@@ -13,27 +13,19 @@ def _envelope(events: list[dict[str, Any]]) -> dict[str, Any]:
     return {"schema_version": "1.0", "events": events}
 
 
-def test_default_transport_sets_user_agent(monkeypatch) -> None:
-    # The stdlib default UA is 403'd by Cloudflare in front of the gateway — the
-    # request must carry a named User-Agent or every batch is silently dropped.
-    captured: dict[str, Any] = {}
-
-    class _Resp:
-        status = 200
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *a):
-            return False
+def test_default_transport_never_sends(monkeypatch) -> None:
+    # Umbrella fork: vendor telemetry egress removed. The default transport is a
+    # hard no-op that returns before constructing any request, so urlopen must
+    # NEVER be called — no batch can reach the maintainer's gateway. See CHANGELOG.
+    called: dict[str, Any] = {}
 
     def fake_urlopen(req, timeout=0):
-        captured["ua"] = req.get_header("User-agent")
-        return _Resp()
+        called["hit"] = True
+        raise AssertionError("egress attempted: _http_post reached urlopen")
 
     monkeypatch.setattr(exporter_mod.urllib.request, "urlopen", fake_urlopen)
-    exporter_mod._http_post("https://gw.example", b"{}")
-    assert captured["ua"] and "python-urllib" not in captured["ua"].lower()
+    exporter_mod._http_post("https://gw.example", b"{}")  # must not raise / not send
+    assert called == {}  # urlopen was never reached
 
 
 def test_flushes_when_batch_full() -> None:
