@@ -163,6 +163,21 @@ fight our fork's own doc reshape and conventions. Cherry-pick the specific fixes
 or features that make sense, resolve conflicts in our favor (our kata shape
 wins), and note anything notable in `CHANGELOG.md`.
 
+### Upstream watch
+
+Things we want from upstream but are **not** building ourselves — pull them down
+when they land rather than diverging the core to build our own. Check with
+`git fetch upstream && git log --oneline main..upstream/main`.
+
+| Want | Why | Where it lands | On arrival |
+|---|---|---|---|
+| **Phase-2 plugin-contribution aggregator** — wire the typed `ToolContribution` / `MiddlewareContribution` / `PromptContribution` / `SubAgentContribution` into `plugin_loader._discover` so they're actually consumed (today only `SafetyDeclaration` is). | Cleaner, typed, per-role plugin API than the current `PluginBundle` grab-bag. No capability gap — `PluginBundle` + entry-points already do everything today, so this is ergonomics, not a blocker. | `packages/decepticon-core/decepticon_core/plugin_loader.py`, `packages/decepticon/decepticon/agents/build.py`, `contracts/` | Cherry-pick the commits, rebuild, note in `CHANGELOG.md`. |
+
+Rule of thumb: if a want here would force edits to the deep core files
+(`plugin_loader.py`, `agents/build.py`, `contracts/`), prefer waiting for
+upstream over building it — those are the hardest to reconcile on a later pull.
+Build it ourselves only when a real need can't wait.
+
 ---
 
 ## See also
