@@ -116,7 +116,7 @@ an architectural decision, link the ADR from the PR description.
 
 ## Releases
 
-Maintainers: see [RELEASE.md](RELEASE.md) for the versioning model and the release process.
+Maintainers: see [docs/release.md](docs/release.md) for the versioning model and the release process.
 
 ## Security
 

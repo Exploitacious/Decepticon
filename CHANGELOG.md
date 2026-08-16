@@ -6,6 +6,56 @@ follows [Semantic Versioning](https://semver.org/) from `1.0.0`
 onward (the `0.x` cycle is pre-stable per the core/framework/sdk split
 design spec, §13.4).
 
+## [Unreleased] — Umbrella/Exploitacious fork
+
+Local changes maintained in this fork (not upstream releases). See
+[CLAUDE.md](CLAUDE.md) for the fork's conventions and the upstream-cherry-pick
+workflow.
+
+### Added
+
+- `ARCHITECTURE.md` — a code-verified, end-to-end reference for how the harness
+  works (runtime topology, agent framework, LLM gateway, security model,
+  clients, benchmarking, CI, extension surfaces).
+- `CLAUDE.md` — how we work in this fork (project kata, the GLM-5.3-via-OpenCode-Go
+  setup, the fork/compose-home split, the upstream cherry-pick workflow).
+- `docs/README.md` — a documentation index over `docs/` (runbooks, deep-dives,
+  playbooks, backlog), per the kata.
+- `scripts/refresh.sh` — one-command rebuild + redeploy of the stack from this
+  checkout (`--no-pull` / `--force`).
+- `upstream` git remote (`PurpleAILAB/Decepticon`, fetch-only) for selective
+  cherry-picks.
+
+### Changed
+
+- **LLM**: pinned GLM 5.3 via the OpenCode Go subscription. `custom/glm-5.3`
+  (static route, keyed on `CUSTOM_OPENAI_API_KEY`) is the live path; the
+  first-class `opencode_go_api` method now emits `opencode-go/glm-5.3` at every
+  tier with a matching static route. Retired the dead
+  `opencode-go/glm-5.2`/`5.1`/`5` ids from `METHOD_MODELS`, the `/model` CLI
+  catalog, and the LiteLLM routes.
+- Restored the three Bedrock aliases (`claude-opus-4-7`, `sonnet-4-6`,
+  `haiku-4-5`) that an in-flight edit had dropped as collateral.
+
+### Fixed (documentation drift; code is the source of truth)
+
+- `README.md` now describes the HTTP sandbox transport (`sandbox:9999`, not the
+  retired Docker socket) and the real agent roster (18 specialists + orchestrator
+  + a vulnerability-research plugin bundle).
+- `docs/architecture.md` carries a "partially superseded" banner pointing at
+  `ARCHITECTURE.md`, and its transport sentence is corrected.
+- `docs/skillogy.md` now points at the current v0.2 design
+  (`design/skillogy-brain-redesign.md`) and its tool count matches the shipped
+  three-tool surface.
+
+### Repository shape (project kata)
+
+- Root reduced toward the four canonical docs. `RELEASE.md` moved to
+  `docs/release.md`; the completed, orphaned `SPEC.md` removed. Tool-convention
+  files (`LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`,
+  `TELEMETRY.md`, `THIRD_PARTY_LICENSES.md`, `CONTRIBUTING_AGENT.md`,
+  `README_KO.md`, `.github/`) kept at root as documented exceptions.
+
 ## [1.1.40] — 2026-07-27
 
 ### Fixed

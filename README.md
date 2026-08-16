@@ -143,7 +143,7 @@ But more importantly: it operates under the discipline that separates red teamer
 
 **Interactive shells, actually.** Real offensive tools are interactive (`msfconsole`, `sliver-client`, `evil-winrm`). Decepticon runs every command inside persistent tmux sessions with automatic prompt detection — so when a tool drops into an interactive prompt, the agent sends follow-up commands without workarounds.
 
-**Hardened sandbox isolation.** All commands run inside a Kali Linux sandbox on a dedicated operational network (`sandbox-net`), separate from the management plane (`decepticon-net`). LangGraph drives the sandbox via the Docker socket. → **[Architecture](docs/architecture.md)**
+**Hardened sandbox isolation.** All commands run inside a Kali Linux sandbox on a dedicated operational network (`sandbox-net`), separate from the management plane (`decepticon-net`). LangGraph drives the sandbox over an HTTP daemon on `sandbox:9999` — the Docker socket is deliberately kept out of the agent path. → **[Architecture](ARCHITECTURE.md)**
 
 **Offense serves defense.** The planned [Offensive Vaccine](docs/offensive-vaccine.md) loop will turn findings into defense improvements through an attack → defend → verify cycle.
 
@@ -157,17 +157,17 @@ But more importantly: it operates under the discipline that separates red teamer
 
 Two-network design. The **always-on** management plane (LiteLLM, PostgreSQL, Skillogy, LangGraph) and the always-on sandbox plane stay up across the whole engagement; everything else is **dynamic-spawn** — the Web dashboard comes up on `/web` from the CLI, and specialist workloads (BloodHound CE, Sliver C2, Ghidra MCP, …) come up only when the orchestrator calls `ops_start(...)` (see [ADR-0006](docs/adr/0006-agent-driven-container-lifecycle.md)). Networks: management on `decepticon-net`; sandbox + C2 server + targets on `sandbox-net`. Neo4j is dual-homed so the agent (on management) can persist findings written from inside the sandbox.
 
-→ **[Architecture deep dive](docs/architecture.md)** · **[Knowledge graph](docs/knowledge-graph.md)**
+→ **[Architecture deep dive](ARCHITECTURE.md)** · **[Knowledge graph](docs/knowledge-graph.md)**
 
 ---
 
 ## Agents
 
-16 specialist agents organized by kill chain phase, with a fresh context window per objective — no accumulated noise.
+Eighteen specialist agents plus the orchestrator, organized by kill chain phase, each with a fresh context window per objective — no accumulated noise. An opt-in plugin bundle adds a five-stage vulnerability-research pipeline.
 
-Orchestration · Reconnaissance · Exploitation · Post-Exploitation · Vulnerability Research · Domain Specialists (AD, Cloud, Smart Contracts, Reversing, Analyst).
+Orchestration · Reconnaissance · Exploitation · Post-Exploitation · Domain Specialists (AD, Cloud, Smart Contracts, Reversing, Mobile, Wireless, OSINT, IoT, ICS, Forensics, Supply Chain, Phishing) · Blue Cell (defensive) · Analyst · Vulnerability Research (plugin bundle).
 
-→ **[Full agent roster and middleware stack](docs/agents.md)**
+→ **[Full agent roster and middleware stack](docs/agents.md)** · **[Architecture](ARCHITECTURE.md)**
 
 ---
 
@@ -200,11 +200,12 @@ Configure via `decepticon onboard`. → **[Full model reference & fallback examp
 | Model profiles and fallback chain | [Models](docs/models.md) |
 | Skill system and format spec | [Skills](docs/skills.md) |
 | Web dashboard features and setup | [Web Dashboard](docs/web-dashboard.md) |
-| System architecture and network isolation | [Architecture](docs/architecture.md) |
+| How the harness works, end to end | [Architecture](ARCHITECTURE.md) |
 | Neo4j knowledge graph | [Knowledge Graph](docs/knowledge-graph.md) |
 | End-to-end engagement workflow | [Engagement Workflow](docs/engagement-workflow.md) |
 | Offensive Vaccine loop | [Offensive Vaccine](docs/offensive-vaccine.md) |
 | Contributing to Decepticon | [Contributing](docs/contributing.md) |
+| Full documentation index | [docs/README.md](docs/README.md) |
 
 ---
 

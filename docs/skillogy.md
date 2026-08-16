@@ -1,8 +1,8 @@
 # Skillogy
 
-Skillogy is Decepticon's knowledge-graph-backed skill discovery system. It replaces text-matching autoload with a typed Neo4j graph built at CI time and exposed to agents through five tools. Skills are still authored as `SKILL.md` files — Skillogy is the discovery layer on top of them.
+Skillogy is Decepticon's knowledge-graph-backed skill discovery system. It replaces text-matching autoload with a typed Neo4j graph built at CI time and exposed to agents through a focused tool set (`find_skill`, `load_skill`, `traverse`). Skills are still authored as `SKILL.md` files — Skillogy is the discovery layer on top of them.
 
-> **Status**: v0.1 design — see [docs/design/skillogy.md](design/skillogy.md) for the full specification.
+> **Status**: the current design is v0.2, the "Brain" redesign — see [docs/design/skillogy-brain-redesign.md](design/skillogy-brain-redesign.md) for the authoritative specification. The earlier [docs/design/skillogy.md](design/skillogy.md) is the superseded v0.1 draft; this overview page also predates v0.2 in places.
 >
 > The current production path is still the text-matching `SkillsMiddleware` ([docs/skills.md](skills.md)). Skillogy ships behind a feature flag and becomes default once benchmark validation passes.
 

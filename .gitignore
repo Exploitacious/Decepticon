@@ -93,8 +93,10 @@ skills/_corpus/
 .claude/
 .agents/
 
-# Project-specific Claude Code instructions (private)
-CLAUDE.md
+# CLAUDE.md is a TRACKED canonical doc in this fork (how-we-work; see the kata
+# in CLAUDE.md itself). Keep any genuinely machine-local, private instructions
+# in CLAUDE.local.md instead — that stays ignored.
+CLAUDE.local.md
 references/octogent
 clients/launcher/decepticon
 

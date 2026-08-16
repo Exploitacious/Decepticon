@@ -7,7 +7,7 @@ avoid. It complements:
 
 - [CONTRIBUTING.md](../CONTRIBUTING.md) — how to participate (setup, PR
   basics, code conventions)
-- [RELEASE.md](../RELEASE.md) — versioning and the release-workflow
+- [release.md](release.md) — versioning and the release-workflow
   walkthrough
 - [SECURITY.md](../SECURITY.md) — how to report vulnerabilities
 
@@ -175,7 +175,7 @@ past, not as theoretical hygiene.
 ## 5. Releases
 
 The release process is documented end-to-end in
-[RELEASE.md](../RELEASE.md). This section covers only the **collaboration
+[release.md](release.md). This section covers only the **collaboration
 gate** — who approves what, and where the human-in-the-loop step lives.
 
 ### 5.1 The gate

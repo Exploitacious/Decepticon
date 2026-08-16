@@ -1,8 +1,15 @@
 # Architecture
 
+> ⚠ **Partially superseded.** The current, code-verified architecture reference
+> is [/ARCHITECTURE.md](../ARCHITECTURE.md). This document predates the HTTP-only
+> sandbox migration and still describes the retired Docker-socket transport in
+> places. Trust the root `ARCHITECTURE.md` for the sandbox transport, the
+> `opscontrol` bridge, and current service/agent counts; this page is kept for
+> its diagrams and narrative detail.
+
 ## Overview
 
-Decepticon runs on two Docker networks. Management infrastructure (LLM proxy, databases, agent API) and operational infrastructure (sandbox, C2, targets) are separated so that no offensive tool inside the sandbox can reach the LLM gateway, the API surface, or your credentials over the network. The agent drives the sandbox via the Docker socket, never via TCP.
+Decepticon runs on two Docker networks. Management infrastructure (LLM proxy, databases, agent API) and operational infrastructure (sandbox, C2, targets) are separated so that no offensive tool inside the sandbox can reach the LLM gateway, the API surface, or your credentials over the network. The agent drives the sandbox over an HTTP daemon on `sandbox:9999` — the Docker socket was removed from the agent path (see [/ARCHITECTURE.md](../ARCHITECTURE.md#how-the-sandbox-is-reached-http-not-the-docker-socket)).
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
