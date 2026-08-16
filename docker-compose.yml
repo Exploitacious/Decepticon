@@ -350,14 +350,19 @@ services:
     # Note: $$ escapes compose interpolation so the literal $LANGGRAPH_STRICT_ASYNC
     # reaches the shell — the env var is set on the container via env_file:.env,
     # and the if/else decision happens at container start, not at compose render.
+    # --no-reload: langgraph dev's file watcher otherwise reloads on its own
+    # ./.langgraph_api/.langgraph_ops.pckl heartbeat writes (~every 10s), which
+    # (with --allow-blocking) wedges the event loop so :2024 never serves and the
+    # launcher's "assistant loaded" check times out. Hot-reload is a dev-only
+    # convenience we don't want on an engagement box. (Umbrella fork.)
     command:
       - sh
       - -c
       - >
         if [ -z "$${LANGGRAPH_STRICT_ASYNC:-}" ]; then
-          exec langgraph dev --host 0.0.0.0 --port 2024 --no-browser --n-jobs-per-worker 10 --allow-blocking;
+          exec langgraph dev --host 0.0.0.0 --port 2024 --no-browser --n-jobs-per-worker 10 --no-reload --allow-blocking;
         else
-          exec langgraph dev --host 0.0.0.0 --port 2024 --no-browser --n-jobs-per-worker 10;
+          exec langgraph dev --host 0.0.0.0 --port 2024 --no-browser --n-jobs-per-worker 10 --no-reload;
         fi
     build:
       context: .
