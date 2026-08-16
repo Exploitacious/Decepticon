@@ -143,7 +143,7 @@ postgres/neo4j volumes. Health check after a refresh:
 
 ```bash
 curl -sS http://127.0.0.1:4000/v1/chat/completions \
-  -H 'Authorization: Bearer sk-decepticon-master' \
+  -H "Authorization: Bearer $(grep '^LITELLM_MASTER_KEY=' ~/.decepticon/.env | cut -d= -f2)" \
   -H 'Content-Type: application/json' \
   -d '{"model":"custom/glm-5.3","messages":[{"role":"user","content":"ping"}],"max_tokens":50}'
 ```

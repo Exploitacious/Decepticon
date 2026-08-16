@@ -63,6 +63,6 @@ docker compose --profile cli ps --format 'table {{.Name}}\t{{.Status}}'
 echo ""
 echo "done. quick health check:"
 echo "  curl -sS http://127.0.0.1:4000/v1/chat/completions \\"
-echo "    -H 'Authorization: Bearer sk-decepticon-master' \\"
+echo "    -H \"Authorization: Bearer \$(grep '^LITELLM_MASTER_KEY=' ~/.decepticon/.env | cut -d= -f2)\" \\"
 echo "    -H 'Content-Type: application/json' \\"
 echo "    -d '{\"model\":\"custom/glm-5.3\",\"messages\":[{\"role\":\"user\",\"content\":\"ping\"}],\"max_tokens\":200}'"
