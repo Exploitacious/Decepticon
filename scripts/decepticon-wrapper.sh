@@ -15,7 +15,9 @@
 # =============================================================================
 set -euo pipefail
 
-REPO="$HOME/Decepticon"
+# Resolve the repo root from this script's real location (follows the
+# ~/.local/bin/decepticon symlink), so moving the repo never breaks the command.
+REPO="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
 REAL="$REPO/clients/launcher/bin/decepticon"
 REFRESH="$REPO/scripts/refresh.sh"
 

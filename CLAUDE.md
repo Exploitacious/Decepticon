@@ -81,8 +81,10 @@ disaster recovery) live in the **private** COWORK context, not in this public-fo
 repo: `CONTEXT/projects/decepticon-lessons.md` and `CONTEXT/machines.md`. The
 portable essentials:
 
-- **Two directories.** `~/Decepticon` is this fork (all container images are
-  **built from this checkout**). `~/.decepticon` is the compose home — it symlinks
+- **Two directories.** `~/COWORK/PROJECTS/Exploitacious/Decepticon` is this fork
+  (all container images are **built from this checkout**; the launcher scripts
+  derive the repo root from their own location, so the path can move freely).
+  `~/.decepticon` is the compose home — it symlinks
   `docker-compose.yml`/`config/`/`containers/` back into the fork, and holds the
   *real* `.env`, `workspace/`, and `telemetry/` as local files. **Code lives in
   the fork; state lives in `~/.decepticon`.** A rebuild never touches
@@ -123,7 +125,7 @@ cd ~/.decepticon && docker compose --profile cli up -d
 `decepticon` is a symlink to `scripts/decepticon-wrapper.sh`, which front-ends the
 fork-built launcher and reroutes bare -> `start` and `update` -> `refresh.sh`. If
 it goes missing after a clone/rebuild, re-wire it:
-`ln -sf ~/Decepticon/scripts/decepticon-wrapper.sh ~/.local/bin/decepticon`
+`ln -sf ~/COWORK/PROJECTS/Exploitacious/Decepticon/scripts/decepticon-wrapper.sh ~/.local/bin/decepticon`
 (rebuild the launcher binary first with `make launcher` if absent).
 
 ### Rebuild loop

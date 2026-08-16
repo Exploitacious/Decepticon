@@ -21,7 +21,8 @@
 # =============================================================================
 set -euo pipefail
 
-REPO="$HOME/Decepticon"
+# Repo root derived from this script's real location (move-proof).
+REPO="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
 HOME_DIR="$HOME/.decepticon"
 PULL=1
 FORCE=0
