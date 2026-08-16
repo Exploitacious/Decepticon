@@ -531,31 +531,19 @@ model_list:
       input_cost_per_token: 0
       output_cost_per_token: 0
 
-  # OpenCode Go — https://opencode.ai/zen/go/v1 (flat subscription; pinned $0,
-  # not per-token billed). The ``opencode-go/`` alias mirrors METHOD_MODELS;
-  # any other catalog id (kimi-k3, qwen3.8-max, deepseek-v4-pro, …) is reachable
-  # via a DECEPTICON_MODEL_<ROLE>=opencode-go/<id> override (dynamic route).
-  - model_name: opencode-go/glm-5.2
+  # Custom OpenAI-compatible endpoint — OpenCode Go subscription (/zen/go/v1).
+  # model_name MUST equal what decepticon.llm.factory emits for the
+  # custom_openai_api method: ``custom/<CUSTOM_OPENAI_MODEL>``. The proxy-side
+  # dynamic registration of CUSTOM_OPENAI_* did not fire in this image build,
+  # so this static route is the stable fix (per the ProxyModelNotFound hint).
+  # Pinned $0: OpenCode Go is a flat subscription, not per-token billed.
+  - model_name: custom/glm-5.3
     litellm_params:
-      model: openai/glm-5.2
+      model: openai/glm-5.3
       api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-    model_info:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-  - model_name: opencode-go/glm-5.1
-    litellm_params:
-      model: openai/glm-5.1
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
-    model_info:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-  - model_name: opencode-go/glm-5
-    litellm_params:
-      model: openai/glm-5
-      api_base: https://opencode.ai/zen/go/v1
-      api_key: os.environ/OPENCODE_GO_API_KEY
+      api_key: os.environ/CUSTOM_OPENAI_API_KEY
+      reasoning_effort: max
+      allowed_openai_params: ["reasoning_effort"]
     model_info:
       input_cost_per_token: 0
       output_cost_per_token: 0
@@ -886,8 +874,6 @@ router_settings:
     # before ModelFallbackMiddleware crosses to another provider.
     - {"opencode/claude-opus-4-6": ["opencode/gpt-5.4"]}
     - {"opencode/gpt-5.4": ["opencode/glm-5-free"]}
-    - {"opencode-go/glm-5.2": ["opencode-go/glm-5.1"]}
-    - {"opencode-go/glm-5.1": ["opencode-go/glm-5"]}
     - {"vercel/anthropic/claude-opus-4.6": ["vercel/anthropic/claude-sonnet-4.6"]}
     - {"vercel/anthropic/claude-sonnet-4.6": ["vercel/anthropic/claude-haiku-4.5"]}
     - {"hf/deepseek-ai/DeepSeek-V3.1": ["hf/meta-llama/Llama-3.3-70B-Instruct-Turbo"]}
