@@ -55,17 +55,6 @@ dev = [
     "ruff>=0.4.0",
     "basedpyright>=1.37.0",
 ]
-lint = [
-    "bandit[toml]>=1.7.10",
-    "deptry>=0.20.0",
-    "vulture>=2.13",
-    "refurb>=2.0.0",
-    "radon>=6.0.1",
-    "xenon>=0.9.1",
-    "mypy>=1.13.0",
-    "semgrep>=1.95.0",
-    "yamllint>=1.35.1",
-]
 
 # ─────────────────────────────────────────────────────────────────────
 # Shared tooling — workspace-wide. Per-package overrides intentionally
@@ -77,11 +66,7 @@ lint = [
 [tool.ruff]
 line-length = 100
 target-version = "py313"
-extend-exclude = [
-    "benchmark/xbow-validation-benchmarks",
-    "benchmark/MHBench",
-    "benchmark/results",
-]
+extend-exclude = []
 
 [tool.ruff.lint]
 # TID251 = flake8-tidy-imports banned-api. Enables the
@@ -116,7 +101,6 @@ known-first-party = ["decepticon", "decepticon_core", "decepticon_sdk"]
 # on langchain / langgraph / deepagents / httpx / fastapi.
 "packages/decepticon/**" = ["TID251"]
 "packages/decepticon-sdk/**" = ["TID251"]
-"benchmark/**" = ["TID251"]
 "clients/**" = ["TID251"]
 "scripts/**" = ["TID251"]
 "config/**" = ["TID251"]
@@ -181,7 +165,6 @@ include = [
     "packages/decepticon/tests",
     "packages/decepticon-sdk",
     "packages/decepticon-sdk/tests",
-    "benchmark",
 ]
 exclude = [
     "**/__pycache__",

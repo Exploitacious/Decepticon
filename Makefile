@@ -51,7 +51,7 @@ export CODEX_AUTH_VOLUME ?= $(shell test -f $(HOME)/.codex/auth.json && echo $(H
         web-build web-hotswap web-lint web-migrate \
         status logs health clean \
         node-install web-db-ensure \
-        benchmark recreate-litellm
+        recreate-litellm
 
 # ── Help (default target) ────────────────────────────────────────
 
@@ -91,9 +91,6 @@ help:
 	@echo "  make logs [SVC=]  Follow logs (default: langgraph)"
 	@echo "  make health       KG + Neo4j + Web health checks"
 	@echo "  make clean        Full teardown (compose volumes + .dogfood/)"
-	@echo ""
-	@echo "Other:"
-	@echo "  make benchmark [ARGS=\"--level 1\"]"
 
 # ── Pre-release Verification (PRIMARY) ───────────────────────────
 
@@ -366,12 +363,3 @@ recreate-litellm:
 		&& echo "recreate-litellm: creds mount OK" \
 		|| (echo "recreate-litellm: creds mount EMPTY — onboard first" && exit 1)
 
-## Run benchmark suite (usage: make benchmark ARGS="--level 1")
-benchmark:
-	uv run python -m benchmark.runner $(ARGS)
-
-## CVE-Bench offline dry run (mocked LLM + sandbox, 3 fixtures, seed=0).
-## Output: benchmark/results/cve-bench/dry-run-<YYYY-MM-DD>.jsonl
-cve-bench-dry:
-	CVE_BENCH_DRY_RUN_SEED=0 PYTHONHASHSEED=0 \
-		uv run python -m benchmark.cve_bench.dry_run $(ARGS)
