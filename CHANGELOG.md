@@ -47,6 +47,21 @@ workflow.
   heartbeat writes (~every 10s), which with `--allow-blocking` wedged the event
   loop so `:2024` never served and `decepticon start`'s "assistant loaded" check
   timed out. Hot-reload is a dev-only convenience not wanted on an engagement box.
+- **langgraph dev idle disk writes moved off the NVMe** (`docker-compose.yml`,
+  `.env.example`). The in-memory runtime re-pickled its entire checkpoint state
+  to `/app/.langgraph_api/*.pckl` every 10s with no dirty check and no pruning;
+  measured on VM 150 the `.langgraph_checkpoint.3.pckl` blob reached 198 MB
+  rewritten every ~10s (26.9 MiB/s, 32.3 TB in 18 days, 0.44%/day of NVMe wear).
+  The runtime's own disable switch (`LANGGRAPH_DISABLE_FILE_PERSISTENCE` /
+  `disable_persistence`) is a no-op through `langgraph dev` in langgraph-cli
+  0.4.29 (the config validator strips the key and `run_server` overwrites the env
+  var in the worker), so the fix is a 1 GiB size-capped tmpfs on
+  `/app/.langgraph_api`: the runtime still re-pickles every 10s but into RAM, and
+  the container's block-IO write measured 0 B (vs 277 MB without it). The
+  forward-compatible flag is still set for the day upstream honors it. Trade-off:
+  langgraph run history no longer survives a container restart (it already did
+  not survive a recreate, and engagement evidence persists separately). Guarded
+  by `tests/unit/ops/test_langgraph_persistence_config.py`. See `docs/adr/0013`.
 
 ### Removed
 
