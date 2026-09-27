@@ -400,7 +400,41 @@ services:
       # BENCHMARK_MODE flows in via `env_file: .env` above — no need to
       # re-declare it here. Set BENCHMARK_MODE=1 in .env to engage CTF/XBOW
       # benchmark mode (rule overrides + challenge context inject).
+      #
+      # Forward-compatible flag (currently a no-op through `langgraph dev`; the
+      # tmpfs mount below is the load-bearing fix). `langgraph dev` always runs
+      # the inmem runtime (it hardcodes :memory: and never reads DATABASE_URI),
+      # whose _flush_loop re-pickles the ENTIRE checkpoint state to
+      # /app/.langgraph_api/*.pckl every 10s unconditionally, no dirty check, no
+      # pruning. Measured on VM 150: .langgraph_checkpoint.3.pckl reached 198 MB
+      # and was rewritten every ~10s (26.9 MiB/s, 32.3 TB in 18 days, 0.44%/day
+      # of NVMe wear). This env var is read at import by _persistence.py and the
+      # checkpoint memory backend, BUT langgraph-cli 0.4.29 defeats it two ways:
+      # validate_config_file() strips unknown keys (so langgraph.json cannot pass
+      # disable_persistence) and run_server() then overwrites this env var in the
+      # worker process to str(disable_persistence).lower() = "false" via
+      # patch_environment (langgraph_api/cli.py). So it does not disable writes
+      # today; it is set for the day upstream honors it, and does no harm. See
+      # docs/adr/0013.
+      - LANGGRAPH_DISABLE_FILE_PERSISTENCE=${LANGGRAPH_DISABLE_FILE_PERSISTENCE:-true}
     volumes:
+      # THE FIX: back /app/.langgraph_api with a size-capped tmpfs so the
+      # runtime's unavoidable 10s re-pickling lands in RAM, never the host NVMe.
+      # Verified on this box: with this mount the container's block-IO write
+      # stays at 0 B while the pickle is still rewritten every 10s; without it,
+      # block-IO write climbs continuously. Capped at 1 GiB (~5x the observed
+      # 198 MB) so a runaway blob fails loud with ENOSPC (which crashes the
+      # daemon flush thread — _flush_loop has no try/except — stopping further
+      # writes) instead of silently wearing the disk. Raise the size for very
+      # long engagements. Contents are lost on restart, which changes nothing:
+      # the stack already ran :memory: (state ephemeral across restarts) and
+      # .langgraph_api was never volume-mounted (lost on every recreate); real
+      # engagement evidence persists via EventLogMiddleware + the workspace mount.
+      # See docs/adr/0013.
+      - type: tmpfs
+        target: /app/.langgraph_api
+        tmpfs:
+          size: 1073741824
       # Mount the OAuth credential files read-only so the LLM factory can
       # check file presence + valid JSON before adding a method to the
       # fallback chain. Without this the factory would trust the
