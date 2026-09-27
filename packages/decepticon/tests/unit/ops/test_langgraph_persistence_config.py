@@ -54,9 +54,7 @@ def test_compose_mounts_size_capped_tmpfs_floor() -> None:
     tmpfs_mounts = [
         v
         for v in volumes
-        if isinstance(v, dict)
-        and v.get("type") == "tmpfs"
-        and v.get("target") == _API_DIR
+        if isinstance(v, dict) and v.get("type") == "tmpfs" and v.get("target") == _API_DIR
     ]
     assert tmpfs_mounts, (
         f"compose langgraph service must back {_API_DIR} with a tmpfs so writes "
@@ -76,10 +74,7 @@ def test_compose_sets_forward_compat_disable_flag() -> None:
     env = _langgraph_service().get("environment", [])
     # compose environment is a list of "KEY=VALUE" strings here.
     pairs = dict(item.split("=", 1) for item in env if "=" in item)
-    assert _DISABLE_KEY in pairs, (
-        f"compose langgraph service must set {_DISABLE_KEY} (ADR-0013)."
-    )
+    assert _DISABLE_KEY in pairs, f"compose langgraph service must set {_DISABLE_KEY} (ADR-0013)."
     assert _env_default_truthy(pairs[_DISABLE_KEY]), (
-        f"{_DISABLE_KEY} must default to true; got {pairs[_DISABLE_KEY]!r} "
-        "(ADR-0013)."
+        f"{_DISABLE_KEY} must default to true; got {pairs[_DISABLE_KEY]!r} (ADR-0013)."
     )
