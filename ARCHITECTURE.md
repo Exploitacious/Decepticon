@@ -4,7 +4,7 @@
 > topology, the agent framework, the LLM gateway, the security model, and the
 > surfaces you extend. This is the authoritative "how it works" reference; the
 > [README](README.md) is the "what it is / how to run it" front door, and
-> [CLAUDE.md](CLAUDE.md) is "how we work in this fork."
+> [AGENTS.md](AGENTS.md) is "how we work in this fork."
 >
 > Everything here is verified against the code in this checkout. Where a
 > `docs/` deep-dive contradicts the code, the code wins and this file follows
@@ -213,7 +213,7 @@ path and does much more than compose:
 credential wiring, no engagement scoping, no opscontrol overlay, and — because
 each service has a `build:` block — it will **build from source** any image not
 present locally. This is exactly what the Umbrella fork does deliberately (see
-[CLAUDE.md](CLAUDE.md)): the local checkout is the source of truth, so images are
+[AGENTS.md](AGENTS.md)): the local checkout is the source of truth, so images are
 built from it and `AUTO_UPDATE=false`.
 
 **Makefile targets** codify the from-source paths: `make dogfood` (full launcher
@@ -688,7 +688,7 @@ documentation files plus tool-convention exceptions.
 |---|---|
 | `README.md` | What Decepticon is + how to run it |
 | `ARCHITECTURE.md` | How it works (this file) — the spec/rulebook slot |
-| `CLAUDE.md` | How we work in this fork |
+| `AGENTS.md` | How we work in this fork |
 | `CHANGELOG.md` | Every merged change (Keep a Changelog) |
 
 **Documented kata exceptions kept at root** (tools/platform expect them there, or
@@ -706,7 +706,7 @@ they are referenced by name from code):
 
 **Deep-dive docs** live under `docs/`, indexed by [`docs/README.md`](docs/README.md).
 Component docs live next to their code (`packages/*/README.md`, `clients/*/`,
-`benchmark/*/README.md`). See [CLAUDE.md](CLAUDE.md) for the full kata rules and
+`benchmark/*/README.md`). See [AGENTS.md](AGENTS.md) for the full kata rules and
 the fork's conventions.
 
 ---
@@ -750,7 +750,7 @@ current fact.
 ## See also
 
 - [README.md](README.md) — what Decepticon is and how to run it.
-- [CLAUDE.md](CLAUDE.md) — how we work in this fork (conventions, kata, GLM setup, upstream cherry-picks).
+- [AGENTS.md](AGENTS.md) — how we work in this fork (conventions, kata, GLM setup, upstream cherry-picks).
 - [docs/README.md](docs/README.md) — the deep-dive index.
 - [docs/security/decepticon-threat-model.md](docs/security/decepticon-threat-model.md) — the STRIDE threat model.
 - [docs/adr/](docs/adr/) — architecture decision records.
