@@ -9,7 +9,7 @@ design spec, §13.4).
 ## [Unreleased] — Umbrella/Exploitacious fork
 
 Local changes maintained in this fork (not upstream releases). See
-[CLAUDE.md](CLAUDE.md) for the fork's conventions and the upstream-cherry-pick
+[AGENTS.md](AGENTS.md) for the fork's conventions and the upstream-cherry-pick
 workflow.
 
 ### Added

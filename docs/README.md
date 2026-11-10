@@ -3,7 +3,7 @@
 > The map of `docs/`. Every deep-dive lives here; the four canonical docs live at
 > the repo root. Start with [`/README.md`](../README.md) (what Decepticon is),
 > [`/ARCHITECTURE.md`](../ARCHITECTURE.md) (how it works), and
-> [`/CLAUDE.md`](../CLAUDE.md) (how we work in this fork).
+> [`/AGENTS.md`](../AGENTS.md) (how we work in this fork).
 
 ---
 
@@ -19,7 +19,7 @@ Docs are grouped by **content type**, not filename prefix:
 | Backlog / proposal | Planned directions and not-yet-accepted designs |
 
 The six kata rules that govern this repo's docs are in
-[`/CLAUDE.md` § The project kata](../CLAUDE.md#the-project-kata). When you add a
+[`/AGENTS.md` § The project kata](../AGENTS.md#the-project-kata). When you add a
 doc: put it here (or next to its code if component-specific), add a row to this
 index, and give it an opening "what this is" line and a "see also" footer.
 
@@ -92,4 +92,4 @@ index, and give it an opening "what this is" line and a "see also" footer.
 
 - [/README.md](../README.md) — what Decepticon is and how to run it.
 - [/ARCHITECTURE.md](../ARCHITECTURE.md) — how the harness works, end to end (the current source of truth).
-- [/CLAUDE.md](../CLAUDE.md) — how we work in this fork + the six kata rules.
+- [/AGENTS.md](../AGENTS.md) — how we work in this fork + the six kata rules.

@@ -2,7 +2,7 @@
 # =============================================================================
 # decepticon-wrapper.sh — front-end for the fork-built launcher on this box.
 # =============================================================================
-# `~/.local/bin/decepticon` symlinks here (see CLAUDE.md § Launching). It routes:
+# `~/.local/bin/decepticon` symlinks here (see AGENTS.md § Launching). It routes:
 #   decepticon            -> `decepticon start`   (the launch path we always want)
 #   decepticon update     -> scripts/refresh.sh   (rebuild from THIS fork —
 #                                                   NEVER the launcher's GHCR pull)

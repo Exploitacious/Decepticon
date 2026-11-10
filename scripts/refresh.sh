@@ -3,7 +3,7 @@
 # refresh.sh — rebuild + redeploy the Decepticon stack from THIS checkout
 # =============================================================================
 # Layout: code lives in this repo; runtime state (.env, workspace/, volumes)
-#         lives in the compose home ($HOME/.decepticon). See CLAUDE.md
+#         lives in the compose home ($HOME/.decepticon). See AGENTS.md
 #         § "Running it on this box" for the fork / compose-home split.
 #
 # Usage:
